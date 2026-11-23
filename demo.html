@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Q&A Assistant — Interactive Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; color: #1f2937; background-color: #f3f4f6; padding: 1rem; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .demo-wrapper { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 1rem; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; }
+    .back-link { color: #374151; text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .back-link:hover { color: #111827; text-decoration: underline; }
+    .notice-banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.85rem 1rem; font-size: 0.9rem; color: #1e40af; }
+    .chat-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; display: flex; flex-direction: column; height: 580px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+    .chat-header { padding: 0.9rem 1.25rem; border-bottom: 1px solid #e5e7eb; background: #fafafa; display: flex; justify-content: space-between; align-items: center; }
+    .chat-header h1 { font-size: 1.05rem; font-weight: 600; color: #111827; }
+    .chat-status { font-size: 0.8rem; color: #059669; display: flex; align-items: center; gap: 0.35rem; }
+    .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .msg { max-width: 82%; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.92rem; line-height: 1.45; word-wrap: break-word; }
+    .msg-bot { align-self: flex-start; background: #f3f4f6; color: #1f2937; border-bottom-left-radius: 2px; }
+    .msg-user { align-self: flex-end; background: #2563eb; color: #ffffff; border-bottom-right-radius: 2px; }
+    .msg-meta { font-size: 0.72rem; color: #6b7280; margin-bottom: 0.25rem; font-weight: 500; }
+    .chips-container { padding: 0.6rem 1.25rem; border-top: 1px solid #f3f4f6; background: #ffffff; }
+    .chips-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+    .chips-list { display: flex; flex-wrap: wrap; gap: 0.4rem; max-height: 86px; overflow-y: auto; }
+    .chip { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 9999px; padding: 0.25rem 0.65rem; font-size: 0.8rem; color: #374151; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; font-family: inherit; }
+    .chip:hover { background: #e5e7eb; color: #111827; border-color: #d1d5db; }
+    .chat-input-area { padding: 0.85rem 1.25rem; border-top: 1px solid #e5e7eb; background: #ffffff; display: flex; gap: 0.5rem; }
+    .chat-input { flex: 1; padding: 0.65rem 0.85rem; font-size: 0.92rem; border: 1px solid #d1d5db; border-radius: 6px; outline: none; font-family: inherit; }
+    .chat-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
+    .btn-send { padding: 0.65rem 1.15rem; background: #2563eb; color: #ffffff; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .btn-send:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="demo-wrapper">
+    <div class="top-bar">
+      <a class="back-link" href="index.html">&larr; Back to portfolio</a>
+    </div>
+
+    <div class="notice-banner">
+      <strong>Notice:</strong> Demo with sample data for a fictional gym. The real system connects to an LLM API and answers from your own FAQ/docs.
+    </div>
+
+    <div class="chat-card">
+      <div class="chat-header">
+        <h1>AI Q&A Assistant — Interactive Demo</h1>
+        <div class="chat-status">
+          <span class="status-dot"></span>
+          <span>Sample Mode: Sunrise Fitness</span>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatBox">
+        <div class="msg msg-bot">
+          <div class="msg-meta">Assistant</div>
+          Hello! Welcome to the Sunrise Fitness sample assistant. Ask a question below or pick a suggested topic to see how inquiries are answered from reference FAQs.
+        </div>
+      </div>
+
+      <div class="chips-container">
+        <div class="chips-label">Suggested sample questions:</div>
+        <div class="chips-list" id="chipsList"></div>
+      </div>
+
+      <form class="chat-input-area" id="chatForm">
+        <input type="text" class="chat-input" id="userInput" placeholder="Ask about hours, pricing, trainers, lockers..." autocomplete="off">
+        <button type="submit" class="btn-send">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const sampleFAQ = [
+      {
+        id: "hours",
+        keywords: ["hour", "hours", "time", "open", "close", "schedule", "opening"],
+        chip: "Opening hours",
+        question: "What are your opening hours?",
+        answer: "Sunrise Fitness is open Monday through Friday from 6:00 AM to 10:00 PM, and Saturday through Sunday from 8:00 AM to 8:00 PM. (All hours are fictional sample data for this demo.)"
+      },
+      {
+        id: "pricing",
+        keywords: ["price", "pricing", "cost", "membership", "fee", "plan", "rate", "month"],
+        chip: "Membership pricing",
+        question: "How much does a membership cost?",
+        answer: "We offer three monthly membership tiers: Basic at $35/month (gym floor access), Standard at $55/month (gym floor plus group classes), and Premium at $75/month (all-access including sauna and towel service). (All pricing is fictional sample data for this demo.)"
+      },
+      {
+        id: "training",
+        keywords: ["training", "trainer", "coach", "personal", "pt", "private"],
+        chip: "Personal training",
+        question: "Do you offer personal training?",
+        answer: "Yes, certified personal trainers are available for 1-on-1 sessions. Packages start at $40 per 50-minute session and include customized fitness assessments. (Fictional sample data.)"
+      },
+      {
+        id: "trial",
+        keywords: ["trial", "free", "try", "first", "visit", "sample"],
+        chip: "Trial class",
+        question: "Can I try a class or visit for free?",
+        answer: "Yes, first-time local visitors can claim a complimentary one-day trial pass. You can sign up at the front desk upon arrival with a photo ID. (Fictional sample data.)"
+      },
+      {
+        id: "cancellation",
+        keywords: ["cancel", "cancellation", "quit", "stop", "freeze", "terminate", "refund"],
+        chip: "Cancellation policy",
+        question: "What is your cancellation policy?",
+        answer: "Memberships can be canceled anytime with at least 7 days written notice prior to your next monthly billing date. There are no cancellation fees or lock-in contracts. (Fictional sample data.)"
+      },
+      {
+        id: "parking",
+        keywords: ["parking", "park", "car", "garage", "lot", "drive"],
+        chip: "Parking",
+        question: "Is parking available on-site?",
+        answer: "Yes, free 2-hour parking is provided for all active members in the parking garage directly behind our facility. Please validate your ticket at the front desk. (Fictional sample data.)"
+      },
+      {
+        id: "showers",
+        keywords: ["shower", "showers", "locker", "lockers", "towel", "bathroom", "changing"],
+        chip: "Showers & lockers",
+        question: "Are showers and lockers provided?",
+        answer: "Yes, daily-use lockers and hot showers are available in both locker rooms at no additional fee. Please bring your own padlock for lockers. (Fictional sample data.)"
+      },
+      {
+        id: "student",
+        keywords: ["student", "discount", "college", "university", "school", "youth"],
+        chip: "Student discount",
+        question: "Do you offer student discounts?",
+        answer: "Yes, currently enrolled full-time students receive a 15% discount on all recurring monthly membership tiers with a valid student ID card. (Fictional sample data.)"
+      },
+      {
+        id: "guest",
+        keywords: ["guest", "friend", "pass", "visitor", "bring", "companion"],
+        chip: "Guest passes",
+        question: "Can I bring a guest with me?",
+        answer: "Standard and Premium members receive 2 complimentary guest passes per calendar month. Guests must register at check-in with a valid photo ID. (Fictional sample data.)"
+      }
+    ];
+
+    const fallbackResponse = "In the full version, questions like this are answered by the AI from your documents — this demo only covers the sample FAQ.";
+    const chatBox = document.getElementById("chatBox");
+    const chipsList = document.getElementById("chipsList");
+    const chatForm = document.getElementById("chatForm");
+    const userInput = document.getElementById("userInput");
+
+    function renderChips() {
+      sampleFAQ.forEach(item => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "chip";
+        btn.textContent = item.chip;
+        btn.addEventListener("click", () => {
+          handleUserQuery(item.question);
+        });
+        chipsList.appendChild(btn);
+      });
+    }
+
+    function appendMessage(sender, text) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = sender === "user" ? "msg msg-user" : "msg msg-bot";
+      
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.textContent = sender === "user" ? "You" : "Assistant";
+      msgDiv.appendChild(meta);
+
+      const content = document.createElement("div");
+      content.textContent = text;
+      msgDiv.appendChild(content);
+
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function matchFAQ(query) {
+      const q = query.toLowerCase();
+      for (const item of sampleFAQ) {
+        for (const kw of item.keywords) {
+          if (q.includes(kw)) {
+            return item.answer;
+          }
+        }
+      }
+      return fallbackResponse;
+    }
+
+    function handleUserQuery(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+
+      appendMessage("user", trimmed);
+      userInput.value = "";
+
+      const answer = matchFAQ(trimmed);
+      setTimeout(() => {
+        appendMessage("bot", answer);
+      }, 200);
+    }
+
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleUserQuery(userInput.value);
+    });
+
+    renderChips();
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jingxing Dong — Portfolio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; background-color: #f9fafb; padding: 0 1rem; }
+    .container { max-width: 820px; margin: 0 auto; padding: 2.5rem 0 4rem; }
+    header { padding-bottom: 2rem; border-bottom: 1px solid #e5e7eb; }
+    h1 { font-size: 2rem; font-weight: 700; color: #111827; letter-spacing: -0.02em; }
+    .intro { margin-top: 0.75rem; font-size: 1.15rem; color: #4b5563; max-width: 680px; }
+    section { margin-top: 2.5rem; }
+    h2 { font-size: 1.35rem; font-weight: 600; color: #111827; margin-bottom: 1rem; letter-spacing: -0.01em; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 640px) {
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+      .banner { flex-direction: row; justify-content: space-between; align-items: center; }
+      .steps-list { grid-template-columns: repeat(3, 1fr); }
+    }
+    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.25rem; }
+    .card h3 { font-size: 1.05rem; font-weight: 600; color: #111827; margin-bottom: 0.5rem; }
+    .card p { font-size: 0.95rem; color: #4b5563; }
+    .banner { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+    .banner-text { font-size: 0.98rem; color: #166534; }
+    .btn { display: inline-block; background: #15803d; color: #ffffff; text-decoration: none; padding: 0.6rem 1.1rem; border-radius: 6px; font-weight: 500; font-size: 0.92rem; }
+    .btn:hover { background: #166534; }
+    .project-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.4rem; margin-bottom: 1.25rem; }
+    .project-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .badge { font-size: 0.75rem; font-weight: 600; color: #1e40af; background: #eff6ff; border: 1px solid #dbeafe; padding: 0.15rem 0.55rem; border-radius: 9999px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0; }
+    .tag { font-size: 0.78rem; color: #374151; background: #f3f4f6; border-radius: 4px; padding: 0.2rem 0.5rem; }
+    .tag-scenario { font-size: 0.8rem; color: #065f46; background: #ecfdf5; border: 1px solid #d1fae5; border-radius: 4px; padding: 0.2rem 0.55rem; }
+    .note-text { font-size: 0.85rem; color: #6b7280; font-style: italic; margin-bottom: 0.5rem; }
+    .evolution-tag { font-size: 0.82rem; color: #92400e; background: #fef3c7; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+    .skills-group { margin-bottom: 1rem; }
+    .skills-title { font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; }
+    .steps-list { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+    .step-item { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; }
+    .step-num { font-size: 0.85rem; font-weight: 700; color: #4b5563; margin-bottom: 0.35rem; }
+    .step-desc { font-size: 0.9rem; color: #4b5563; }
+    .contact-box { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.25rem; }
+    .contact-line { font-size: 0.95rem; color: #374151; margin-bottom: 0.5rem; }
+    .contact-line:last-child { margin-bottom: 0; }
+    .contact-key { font-weight: 600; display: inline-block; width: 130px; }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Jingxing Dong</h1>
+      <p class="intro">Computer Science senior — I build AI Q&A assistants and Java backends that actually ship.</p>
+    </header>
+
+    <section>
+      <h2>What I can build for you</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>FAQ & Document Assistant</h3>
+          <p>A custom Q&A assistant built specifically for your business. It answers client questions strictly from your uploaded documents, guides, and policies without hallucinating.</p>
+        </div>
+        <div class="card">
+          <h3>Website Chat Widget</h3>
+          <p>An embeddable chat widget for your website that handles visitor questions directly, using your own curated content to address common inquiries around the clock.</p>
+        </div>
+        <div class="card">
+          <h3>Admin-Editable Assistant</h3>
+          <p>A maintainable assistant that you can update yourself. Edit FAQs, adjust reference documents, and refresh answers as your business changes without writing code.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="banner">
+        <div class="banner-text">
+          <strong>Interactive Demo:</strong> See how the Q&A assistant answers questions using sample fitness center data.
+        </div>
+        <a class="btn" href="demo.html">Try the interactive demo (sample data)</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Selected work</h2>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h3>AI Q&A Assistant</h3>
+          <span class="badge">Sole developer</span>
+        </div>
+        <div class="tags">
+          <span class="tag-scenario">FAQ assistant for local businesses</span>
+          <span class="tag-scenario">Document Q&A</span>
+          <span class="tag-scenario">Embeddable chat assistant</span>
+        </div>
+        <p class="note-text">Note: These three tags represent three distinct deployment scenarios clients use this single core system for.</p>
+        <p>Full-stack Q&A application featuring a uni-app frontend supporting both mobile and web clients, backed by a Node.js and Koa server. Integrates LLM API endpoints with strict context grounding to answer user queries exclusively from provided FAQs and documentation. Implements user authentication, persistent chat histories, and production HTTPS deployment on a cloud VPS with a custom domain.</p>
+        <div class="tags">
+          <span class="tag">uni-app</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Koa</span>
+          <span class="tag">LLM API</span>
+          <span class="tag">Cloud VPS</span>
+          <span class="tag">HTTPS</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h3>Fitness Coaching Platform</h3>
+          <span class="badge">Sole developer</span>
+        </div>
+        <span class="evolution-tag">Architecture evolution: Refactored decoupled version</span>
+        <p>Full-stack fitness management application built with a Vue 2 single-page interface and a Spring Boot REST backend. It represents a complete refactor of the earlier monolithic system, decoupling frontend state from backend service logic and MySQL data persistence. Provides structured coach appointment booking, member progress tracking, and secure role-based access.</p>
+        <div class="tags">
+          <span class="tag">Vue 2</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h3>Fitness Membership System</h3>
+          <span class="badge">Sole developer</span>
+        </div>
+        <span class="evolution-tag">Architecture origin: Initial monolithic version</span>
+        <p>The original monolithic web application developed using Java Servlets and MySQL for managing member profiles, check-in records, and gym facilities. It established the core data models and relational database schema that were later redesigned into the Spring Boot and Vue 2 decoupled architecture above.</p>
+        <div class="tags">
+          <span class="tag">Java Servlet</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">JSP / HTML</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills & tools</h2>
+      <div class="skills-group">
+        <div class="skills-title">Core Development</div>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">Vue 2</span>
+          <span class="tag">Node.js / Koa</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-title">LLM & Agents</div>
+        <div class="tags">
+          <span class="tag">LLM API integration (DeepSeek API)</span>
+          <span class="tag">agent harnesses</span>
+          <span class="tag">Antigravity</span>
+          <span class="tag">Muse</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-title">Cloud Server & Networking Setup</div>
+        <div class="tags">
+          <span class="tag">VPS</span>
+          <span class="tag">Cloudflare</span>
+          <span class="tag">3x-ui</span>
+          <span class="tag">FlClash</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>How working with me works</h2>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">Step 1</div>
+          <p class="step-desc"><strong>You send your FAQ / docs:</strong> Provide your existing business documents, frequent customer questions, or support guidelines in plain text or PDF format.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">Step 2</div>
+          <p class="step-desc"><strong>I build and send a live preview:</strong> I configure the assistant, establish prompt boundaries to avoid hallucinations, and share a working preview link for your testing.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">Step 3</div>
+          <p class="step-desc"><strong>You review, I adjust, you get deliverables:</strong> We refine answer phrasing based on your review. Once satisfied, you receive the full code and a clear deployment guide.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <div class="contact-box">
+        <div class="contact-line">
+          <span class="contact-key">Email:</span>
+          <span>[YOUR EMAIL]</span>
+        </div>
+        <div class="contact-line">
+          <span class="contact-key">Fiverr:</span>
+          <span>[YOUR FIVERR PROFILE LINK]</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Jingxing Dong. Built with clean, accessible static HTML and CSS.</p>
+    </footer>
+  </div>
+</body>
+</html>
